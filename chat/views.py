@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView,CreateView,DeleteView
+from django.views.generic import ListView,CreateView,DeleteView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Project
 from .forms import ProjectForm
@@ -27,6 +27,18 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         messages.success(self.request, 'Project created successfully')
         return super().form_valid(form) 
+    
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'chat/project_form.html'
+    success_url = reverse_lazy('chat:project_list')
+    def form_valid(self, form):
+        messages.success(self.request, 'Project updated successfully')
+        return super().form_valid(form)
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
+    
 
 
 
