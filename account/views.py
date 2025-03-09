@@ -3,7 +3,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView, LogoutView
 from.forms import CustomSignupForm, CustomLoginForm
 from django.urls import reverse_lazy
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout
 
 
 class SignupView(CreateView):
@@ -19,3 +19,6 @@ class SignupView(CreateView):
 class CustomLoginForm(LoginView):
     authentication_form = CustomLoginForm
     template_name = 'account/login.html'
+
+class CustomLogoutView(LogoutView):
+    next_page = reverse_lazy('login')
