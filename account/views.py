@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import CreateView
-from.forms import CustomSignupForm
+from django.contrib.auth.views import LoginView, LogoutView
+from.forms import CustomSignupForm, CustomLoginForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login, authenticate
 
@@ -13,4 +14,8 @@ class SignupView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request.user)
-        return redirect(success_url)
+        return redirect(self.success_url)
+
+class CustomLoginForm(LoginView):
+    authentication_form = CustomLoginForm
+    template_name = 'account/login.html'
