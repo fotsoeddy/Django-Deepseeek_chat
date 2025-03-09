@@ -1,122 +1,112 @@
-Django DeepSeek Chat
-📌 Description
-Django DeepSeek Chat is a real-time chat application built with Django, Django Channels, and WebSockets. It allows users to create and join dynamic chat rooms and interact with an integrated DeepSeek AI. The application is optimized for a smooth and responsive experience, enabling users to ask questions to the AI, learn, and collaborate on projects.
+# Django DeepSeek Chat
 
-🚀 Features
-📡 WebSockets with Django Channels for real-time communication
+## 📌 Description
+Django DeepSeek Chat est une application de chat en temps réel basée sur Django, Django Channels et WebSockets. Elle permet aux utilisateurs de créer et rejoindre des salons de discussion dynamiques et d'interagir avec une IA DeepSeek intégrée. L'application est optimisée pour offrir une expérience fluide et réactive, permettant aux utilisateurs de poser des questions à l'IA, d'apprendre et de collaborer sur des projets.
 
-👤 User authentication (login and registration)
+## 🚀 Fonctionnalités
+- 📡 **WebSockets avec Django Channels** pour la communication en temps réel
+- 👤 **Authentification utilisateur** (connexion et inscription)
+- 💬 **Salons de discussion dynamiques** (création et gestion des chats)
+- 🔄 **Système de messagerie instantanée** avec mise à jour en temps réel
+- 🤖 **Intégration de l'IA DeepSeek** pour répondre aux questions et assister les utilisateurs
+- 📝 **Stockage des messages dans la base de données**
+- 🎨 **Interface utilisateur responsive** avec Bootstrap
+- ☁️ **Déploiement avec Daphne et Redis**
 
-💬 Dynamic chat rooms (creation and management)
+## 🛠 Prérequis
+Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre machine :
+- **Python 3.8+**
+- **pip et virtualenv**
+- **PostgreSQL ou SQLite** (selon votre choix de base de données)
+- **Redis** (pour la gestion des WebSockets)
+- **Ollama** installé
+- **Un modèle DeepSeek configuré en local avec Ollama**
+- **Git**
 
-🔄 Real-time messaging system with instant updates
+## 📦 Installation
+### 🔹 1. Cloner le dépôt
+```bash
+git clone https://github.com/donaldte/django-deepseek-chat.git
+cd django-deepseek-chat
+```
 
-🤖 DeepSeek AI integration for answering questions and user assistance
-
-📝 Message storage in database
-
-🎨 Responsive UI with Bootstrap
-
-☁️ Deployment with Daphne and Redis
-
-🛠 Prerequisites
-Before starting, ensure you have the following installed:
-
-Python 3.8+
-
-pip and virtualenv
-
-PostgreSQL or SQLite (database choice)
-
-Redis (for WebSocket management)
-
-Ollama installed locally
-
-DeepSeek model configured locally with Ollama
-
-
-
-📦 Installation
-🔹 1. Clone the repository
-
-git clone https://github.com/fotsoeddy/Django-Deepseeek_chat.git
-cd Django-Deepseeek_chat
-🔹 2. Create and activate virtual environment
-
+### 🔹 2. Créer et activer l'environnement virtuel
+```bash
 python -m venv venv
 source venv/bin/activate  # macOS/Linux
 venv\Scripts\activate  # Windows
-🔹 3. Install dependencies
+```
 
+### 🔹 3. Installer les dépendances
+```bash
 pip install -r requirements.txt
-🔹 4. Configure database
+```
 
+### 🔹 4. Configurer la base de données
+```bash
 python manage.py migrate
-🔹 5. Create superuser (optional for admin)
+```
 
+### 🔹 5. Créer un superutilisateur (optionnel pour l'admin)
+```bash
 python manage.py createsuperuser
-🔹 6. Start development server
+```
 
+### 🔹 6. Lancer le serveur de développement
+```bash
 python manage.py runserver
-Access the application at http://127.0.0.1:8000
+```
+Accéder à l'application sur [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-⚙️ WebSocket Configuration with Daphne and Redis
-To run the server in WebSocket mode with Daphne and Redis:
-
+## ⚙️ Configuration WebSockets avec Daphne et Redis
+Pour exécuter le serveur en mode WebSocket avec **Daphne** et **Redis**, utilise :
+```bash
 daphne -b 0.0.0.0 -p 8000 deepseek_chat.asgi:application
-If using Redis as channels backend, ensure it's installed and running:
-
+```
+Si tu utilises **Redis** pour le backend des channels, assure-toi que Redis est installé et lancé :
+```bash
 redis-server
-📜 .env File (Environment Configuration Example)
-Create a .env file at project root with these configurations:
+```
 
+## 📜 Fichier `.env` (Exemple de configuration environnementale)
+Crée un fichier `.env` à la racine du projet et ajoute tes variables de configuration si nécessaire :
+```ini
 SECRET_KEY=your_secret_key
 DEBUG=True
 DATABASE_URL=postgres://user:password@localhost:5432/deepseek_chat
 REDIS_URL=redis://127.0.0.1:6379/0
-🏗 Technologies Used
-Django (core backend)
+```
 
-Django Channels (WebSocket handling)
+## 🏗 Technologies utilisées
+- **Django** (backend principal)
+- **Django Channels** (gestion des WebSockets)
+- **Redis** (gestion des messages en temps réel)
+- **Daphne** (serveur ASGI)
+- **PostgreSQL / SQLite** (base de données)
+- **Bootstrap** (interface utilisateur responsive)
+- **Ollama** (exécution des modèles DeepSeek en local)
 
-Redis (real-time message broker)
+## 🎯 Roadmap
+- 🔜 Ajout des notifications en temps réel
+- 🔜 Support multi-room avancé
+- 🔜 Historique des conversations stocké et consultable
+- 🔜 Amélioration de l'IA pour une meilleure interaction utilisateur
 
-Daphne (ASGI server)
+## 🤝 Contribuer
+Les contributions sont les bienvenues ! Pour contribuer :
+1. Fork le projet 🍴
+2. Crée une branche de fonctionnalité (`git checkout -b feature-xyz`)
+3. Commit tes modifications (`git commit -m "Ajout d'une nouvelle fonctionnalité"`)
+4. Pousse la branche (`git push origin feature-xyz`)
+5. Crée une Pull Request 🛠
 
-PostgreSQL/SQLite (database)
 
-Tailwinds (responsive UI)
 
-Ollama (local DeepSeek model execution)
+## 💬 Contact
+Développé par **Fotso Eddy**. 
+- 🌐 [Site Web](https://fotsoeddysteve.vercel.app/)
+- 📧 Email: fotsotachulaeddysteve@gmail.com
+- 🐙 [GitHub](https://github.com/fotsoeddy)
 
-🎯 Roadmap
-🔜 Real-time notifications
-
-🔜 Advanced multi-room support
-
-🔜 Searchable conversation history
-
-🔜 AI interaction improvements
-
-🤝 Contributing
-Contributions are welcome! To contribute:
-
-Fork the project 🍴
-
-Create a feature branch (git checkout -b feature-xyz)
-
-Commit changes (git commit -m "Add new feature")
-
-Push branch (git push origin feature-xyz)
-
-Create Pull Request 🛠
-
-💬 Contact
-Developed by Fotso Eddy.
-
-🌐 Portfolio https://fotsoeddysteve.vercel.app/
-
-📧 Email: fotsotachulaeddysteve@gmail.com
-
-🐙 GitHub
+⭐️ **N'oublie pas de laisser une étoile sur le repo si ce projet t'a aidé !** ⭐️
 
