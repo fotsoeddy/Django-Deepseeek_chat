@@ -12,18 +12,19 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
-from django.config.messages import constants as messages
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from django.contrib.messages import constants as messages
+
 MESSAGE_TAGS = {
-    messages.DEBUG: 'alert-debug',
-    messages.INFO: 'alert-info',
-    messages.SUCCESS:'alert-success',
-    messages.WARNING: 'alert-warning',
-    messages.ERROR: 'alert-danger',
-    messages.CRITICAL: 'alert-danger',
+    messages.DEBUG: "bg-gray-500 text-white",
+    messages.INFO: "bg-blue-500 text-white",
+    messages.SUCCESS: "bg-green-500 text-white",
+    messages.WARNING: "bg-yellow-500 text-black",
+    messages.ERROR: "bg-red-500 text-white",
 }
 
 # Quick-start development settings - unsuitable for production
@@ -48,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
-    'django-htmx',
+    'django_htmx',
     'account',
     'chat',
 ]
