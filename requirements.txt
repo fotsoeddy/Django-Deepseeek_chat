@@ -1,0 +1,16 @@
+backports.tarfile==1.2.0
+daphne==4.1.2
+django-channels==0.7.0
+django-htmx==1.22.0
+importlib-metadata==8.0.0
+jaraco.collections==5.1.0
+markdown2==2.5.3
+ollama==0.4.7
+packaging==24.2
+pip-chill==1.0.3
+platformdirs==4.2.2
+pyopenssl==25.0.0
+python-decouple==3.8
+service-identity==24.2.0
+tomli==2.0.1
+zope.interface==7.2

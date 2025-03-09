@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Environment variables
+.env
+
+# Virtual environment
+venv/
+.env/
+*.venv
+Pipfile
+Pipfile.lock
+
+# VS Code settings
+.vscode/
+
+# IDE / Editor specific
+*.swp
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Migrations (optional, if you don't want to track them)
+**/migrations/*.py
+**/migrations/*.pyc
+
+# MacOS
+.DS_Store
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Pytest cache
+.pytest_cache/
