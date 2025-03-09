@@ -39,6 +39,16 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Project.objects.filter(owner=self.request.user)
     
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
+    model = Project
+    template_name = 'chat/project_delete.html'
+    success_url = reverse_lazy('chat:project_list')
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, 'Project deleted successfully')
+        return super().delete(request, *args, **kwargs)
+   
 
 
 
