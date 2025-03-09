@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+    .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .markdown-content p {
+        margin-bottom: 10px;
+    }
+
+    .markdown-content code {
+        background: #f4f4f4;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: monospace;
+    }
+
+    .markdown-content pre {
+        background: #2d2d2d;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        overflow-x: auto;
+    }
+
+    .markdown-content a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .markdown-content a:hover {
+        text-decoration: underline;
+    }
+
+    .markdown-content ul, .markdown-content ol {
+        margin-left: 20px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-6">
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Sidebar: List of projects -->
+        <div class="w-full md:w-1/4 bg-gray-50 p-6 rounded-lg shadow-md">
+            <h4 class="text-xl font-bold text-blue-600 mb-4">
+                <i class="fas fa-folder mr-2"></i> My Projects
+            </h4>
+            <ul class="space-y-2">
+                {% for p in projects %}
+                <li class="{% if p.id == project.id %}bg-blue-100{% else %}bg-white{% endif %} p-3 rounded-lg shadow-sm">
+                    <a href="{% url 'chat:chat' p.id %}" class="flex items-center text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-comments mr-2"></i>
+                        <span>{{ p.name }}</span>
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-center text-gray-500">No projects</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Chat section -->
+        <div class="w-full md:w-3/4">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <!-- Chat Header -->
+                <div class="bg-blue-600 text-white p-4">
+                    <h4 class="text-xl font-bold">
+                        <i class="fas fa-comment-dots mr-2"></i> Chat - {{ project.name }}
+                    </h4>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="p-4 h-[600px] overflow-y-auto bg-gray-50">
+                    <div id="chat-box" class="space-y-4">
+                        {% for msg in messages_chat %}
+                        <!-- User Message -->
+                        <div class="bg-blue-50 p-3 rounded-lg max-w-[70%] ml-auto">
+                            <span class="text-blue-600 font-medium">
+                                <i class="fas fa-user mr-1"></i> You:
+                            </span>
+                            <p class="mt-1 text-gray-700">{{ msg.message }}</p>
+                        </div>
+
+                        <!-- AI Response -->
+                        <div class="bg-green-50 p-3 rounded-lg max-w-[70%]">
+                            <span class="text-green-600 font-medium">
+                                <i class="fas fa-robot mr-1"></i> DeepSeek:
+                            </span>
+                            <div class="mt-1 text-gray-700 markdown-content">{{ msg.response|safe }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="p-4 bg-gray-100">
+                    <form id="chat-form" class="flex flex-col space-y-2">
+                        <!-- Typing Indicator -->
+                        <div id="typing-indicator" class="text-center text-blue-600 font-medium" style="display: none;">
+                            <i class="fas fa-circle-notch fa-spin mr-2"></i> DeepSeek is typing...
+                        </div>
+
+                        <!-- Input Group -->
+                        <div class="flex gap-2">
+                            <input type="text" id="message-input" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" placeholder="Type a message..." required>
+                            <button id="chat_submit" type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles -->
+
+
+<!-- WebSocket Script -->
+<script>
+    var chatSocket = null; // WebSocket will be initialized only on message send
+    var messageInput = document.getElementById("message-input");
+    var chatBox = document.getElementById("chat-box");
+    var typingIndicator = document.getElementById("typing-indicator");
+    var chatSubmit = document.getElementById("chat_submit");
+    var currentAiMessage = null;
+
+    function openWebSocket() {
+        if (chatSocket !== null) {
+            chatSocket.close(); // Ensure old WebSocket is closed before opening a new one
+        }
+
+        chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/{{ project.id }}/");
+
+        chatSocket.onopen = function() {
+            console.log("WebSocket opened.");
+        };
+
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+
+            if (data.sender === "user") {
+                chatBox.innerHTML += `<div class="bg-blue-50 p-3 rounded-lg max-w-[70%] ml-auto">
+                    <span class="text-blue-600 font-medium"><i class="fas fa-user mr-1"></i> You:</span>
+                    <p class="mt-1 text-gray-700">${data.message}</p>
+                </div>`;
+            } else if (data.sender === "ai") {
+                // Show typing indicator before AI starts responding
+                typingIndicator.style.display = "block";
+                chatSubmit.disabled = true;
+
+                if (!currentAiMessage) {
+                    // Create a new AI message container for streaming response
+                    currentAiMessage = document.createElement("div");
+                    currentAiMessage.className = "bg-green-50 p-3 rounded-lg max-w-[70%]";
+                    currentAiMessage.innerHTML = `<span class="text-green-600 font-medium"><i class="fas fa-robot mr-1"></i> DeepSeek:</span>
+                        <div class="mt-1 text-gray-700 markdown-content">${data.message}</div>`;
+                    chatBox.appendChild(currentAiMessage);
+                } else {
+                    // Append new chunks instead of replacing
+                    currentAiMessage.querySelector(".markdown-content").innerHTML = data.message;
+                }
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll
+        };
+
+        chatSocket.onclose = function() {
+            console.log("WebSocket closed.");
+            typingIndicator.style.display = "none";
+            chatSubmit.disabled = false;
+        };
+    }
+
+    document.getElementById("chat-form").onsubmit = function(event) {
+        event.preventDefault();
+
+        // Open WebSocket only when a new message is sent
+        openWebSocket();
+
+        // Send message
+        chatSocket.onopen = function() {
+            chatSocket.send(JSON.stringify({"message": messageInput.value}));
+            messageInput.value = "";
+            typingIndicator.style.display = "inline-block";  // Show typing animation
+            chatSubmit.disabled = true;
+            currentAiMessage = null;  // Reset AI message container for new response
+        };
+    };
+</script>
+
+{% endblock %}

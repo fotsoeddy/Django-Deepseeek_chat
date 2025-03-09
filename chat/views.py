@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import  render,get_object_or_404
 from django.views.generic import ListView,CreateView,DeleteView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Project
+from django.views import View
 from .forms import ProjectForm
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -48,6 +49,22 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'Project deleted successfully')
         return super().delete(request, *args, **kwargs)
+    
+
+class ChatView(LoginRequiredMixin, View):
+    template_name = 'chat/chat.html'
+
+    def get(self, request, project_id, *args, **kwargs):
+        project = get_object_or_404(Project, pk=project_id, owner=request.user)
+        messages = project.chatmessage_set.all()
+        projects = Project.objects.all()  # Fetch all projects
+
+        context = {
+            'project': project,
+            'messages': messages,
+            'projects': projects,  # Sidebar projects
+        }
+        return render(request, self.template_name, context)
    
 
 
