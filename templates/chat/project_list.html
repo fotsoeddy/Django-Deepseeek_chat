@@ -7,7 +7,7 @@
 
     <!-- Add Project Button -->
     <div class="flex justify-end mb-6">
-        <a href="{% url 'chat:project_create' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center">
+        <a href="{% url 'chat:project_create' %} " class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center">
             <i class="fas fa-plus-circle mr-2"></i> Add Project
         </a>
     </div>
@@ -19,17 +19,17 @@
             <li class="p-4 hover:bg-gray-50 transition-colors duration-200">
                 <div class="flex justify-between items-center">
                     <!-- Project Name and Link -->
-                    <a href="{% url 'chat:chat' project.id %}" class="flex items-center text-gray-700 hover:text-blue-600">
+                    <a href="" class="flex items-center text-gray-700 hover:text-blue-600">
                         <i class="fas fa-comments text-blue-500 mr-2"></i>
                         <span class="font-medium">{{ project.name }}</span>
                     </a>
 
                     <!-- Action Buttons -->
                     <div class="flex space-x-2">
-                        <a href="{% url 'chat:project_update' project.id %}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-sm flex items-center">
+                        <a href="" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-sm flex items-center">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </a>
-                        <a href="{% url 'chat:project_delete' project.id %}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm flex items-center">
+                        <a href="" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm flex items-center">
                             <i class="fas fa-trash mr-1"></i> Delete
                         </a>
                     </div>

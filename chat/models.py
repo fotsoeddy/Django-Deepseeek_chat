@@ -4,12 +4,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class Project(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_projects', verbose_name='Owner')
     name = models.TextField(verbose_name='Name')
     description = models.TextField(blank=True, null=True, verbose_name='Description')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Created At')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated At')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owned_projects', verbose_name='Owner')
 
     def __str__(self):
         return self.name

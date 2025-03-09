@@ -65,6 +65,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'deepseek_chat.urls'
+LOGIN_REDIRECT_URL = 'chat:project_list'
+LOGOUT_REDIRECT_URL = 'account:login'
+LOGIN_URL = 'account:login'
 
 TEMPLATES = [
     {
