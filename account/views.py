@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout
 class SignupView(CreateView):
     form_class = CustomSignupForm
     template_name = 'account/signup.html'
-    success_url = reverse_lazy('account:login')  # Make sure this matches your URL name
+    success_url = reverse_lazy('chat:project_list')  # Make sure this matches your URL name
 
     def form_valid(self, form):
         user = form.save()  # Get the user object from the form
