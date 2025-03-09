@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}DeepSeek Chat{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+
+    <style>
+        /* Custom styles if needed */
+        [x-cloak] { display: none !important; }
+    </style>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-600 to-purple-600">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <a href="{% url 'chat:project_list' %}" class="text-white text-xl font-bold">
+                    <i class="fas fa-brain mr-2"></i>DeepSeek Chat
+                </a>
+                
+                <!-- Mobile menu button -->
+                <button @click="isOpen = !isOpen" class="md:hidden text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                
+                <!-- Navigation items -->
+                <div class="hidden md:flex ml-auto space-x-6" :class="{'hidden': !isOpen, 'md:flex': true }" x-cloak>
+                    <div class="flex flex-col md:flex-row md:space-x-6">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'chat:project_list' %}" class="text-white hover:text-gray-200 flex items-center">
+                                <i class="fas fa-folder-open mr-2"></i>My Projects
+                            </a>
+                            <a href="{% url 'account:logout' %}" class="text-white hover:text-gray-200 flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </a>
+                        {% else %}
+                            <a href="{% url 'account:login' %}" class="text-white hover:text-gray-200 flex items-center">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            </a>
+                            <a href="{% url 'account:signup' %}" class="text-white hover:text-gray-200 flex items-center">
+                                <i class="fas fa-user-plus mr-2"></i>Sign Up
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alerts -->
+    {% if messages %}
+    <div class="container mx-auto px-4 mt-4">
+        <div class="bg-green-100 text-green-700 p-4 rounded-lg">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4 mt-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Alpine.js for mobile menu -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+    
+    <script>
+        // Simple menu toggle
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('nav', () => ({
+                isOpen: false
+            }))
+        });
+    </script>
+</body>
+</html>
